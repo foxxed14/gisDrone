@@ -39,10 +39,7 @@ def display_map():
     m = folium.Map(location=[float(data_points[-1]['latitude']), float(data_points[-1]['longitude'])], zoom_start=10)
     features = []
 
-    coordinates = []
-    for point in data_points:
-        coordinates.append([float(point['latitude']), float(point['longitude'])])
-        
+    for idx, point in enumerate(data_points):
         # Добавление точек
         feature_point = {
             'type': 'Feature',
@@ -58,10 +55,27 @@ def display_map():
             }
         }
         features.append(feature_point)
-    
-    # Добавление линий
-    folium.PolyLine(coordinates, color="blue", weight=2.5, opacity=1).add_to(m)
 
+        # Если это не первая точка, добавляем линию от предыдущей точки до текущей
+        if idx > 0:
+            prev_point = data_points[idx-1]
+            feature_line = {
+                'type': 'Feature',
+                'geometry': {
+                    'type': 'LineString',
+                    'coordinates': [
+                        [float(prev_point['longitude']), float(prev_point['latitude'])],
+                        [float(point['longitude']), float(point['latitude'])]
+                    ]
+                },
+                'properties': {
+                    'time': point['timestamp'],
+                    'style': {'color': 'blue', 'weight': 5, 'opacity': 0.8},
+                    'popup': 'Route Segment'
+                }
+            }
+            features.append(feature_line)
+    
     feature_collection = {
         'type': 'FeatureCollection',
         'features': features,
@@ -82,5 +96,5 @@ def display_map():
     return render_template_string('<html><body>{{ m | safe }}</body></html>', m=m._repr_html_())
 
 
-if __name__ == '__main__':
-    app.run(debug=True)
+if __name__ == "__main__":
+    app.run(debug=True,host='0.0.0.0', port=8006)

@@ -1,9 +1,10 @@
+
 import requests
 import random
 import time
 
 # URL сервера, на который будут отправляться данные
-SERVER_URL = "http://localhost:8082/data"
+SERVER_URL = "http://localhost:5000/data"
 
 # Начальные координаты
 latitude = 50.0
@@ -39,4 +40,4 @@ if __name__ == "__main__":
             print(f"Ошибка при отправке данных. Статус: {response.status_code}. Ответ: {response.text}")
 
         # Ожидание 10 секунд перед следующей отправкой
-        time.sleep(3)
+        time.sleep(10)

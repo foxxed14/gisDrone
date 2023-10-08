@@ -36,7 +36,6 @@ def receive_data():
     })
 
     return "Данные получены", 200
-# ... [остальной код]
 
 @app.route('/map')
 def display_map():
@@ -46,7 +45,7 @@ def display_map():
     m = folium.Map(location=[float(data_points[0]['latitude']), float(data_points[0]['longitude'])], zoom_start=10)
     features = []
 
-    route_coords = []  # Список для хранения координат маршрута
+    # ... [определение и отображение маршрута, замкнутых областей и т. д.]
 
     for point in data_points:
         feature = {
@@ -63,50 +62,7 @@ def display_map():
             }
         }
         features.append(feature)
-        route_coords.append([float(point['latitude']), float(point['longitude'])])
 
-    # Добавление линии маршрута на карту
-    folium.PolyLine(route_coords, color="blue", weight=2.5, opacity=1).add_to(m)
-
-    # ... [остальная часть функции display_map, например, добавление слайдера времени и т.д.]
-
-    for idx, point in enumerate(data_points):
-        # Добавление точек
-        feature_point = {
-            'type': 'Feature',
-            'geometry': {
-                'type': 'Point',
-                'coordinates': [float(point['longitude']), float(point['latitude'])]
-            },
-            'properties': {
-                'time': point['timestamp'],
-                'style': {'color': 'red'},
-                'icon': 'circle',
-                'popup': f"Temperature: {point['temperature']}°C\nPressure: {point['pressure']} hPa\nHumidity: {point['humidity']}%",
-            }
-        }
-        features.append(feature_point)
-
-        # Если это не первая точка, добавляем линию от предыдущей точки до текущей
-        if idx > 0:
-            prev_point = data_points[idx-1]
-            feature_line = {
-                'type': 'Feature',
-                'geometry': {
-                    'type': 'LineString',
-                    'coordinates': [
-                        [float(prev_point['longitude']), float(prev_point['latitude'])],
-                        [float(point['longitude']), float(point['latitude'])]
-                    ]
-                },
-                'properties': {
-                    'time': point['timestamp'],
-                    'style': {'color': 'blue', 'weight': 5, 'opacity': 0.8},
-                    'popup': 'Route Segment'
-                }
-            }
-            features.append(feature_line)
-    
     feature_collection = {
         'type': 'FeatureCollection',
         'features': features,
@@ -115,8 +71,8 @@ def display_map():
     folium.plugins.TimestampedGeoJson(
         feature_collection,
         period='PT1S',
-        add_last_point=True,   
-        auto_play=True,        
+        add_last_point=True,
+        auto_play=False,
         loop=False,
         max_speed=1,
         loop_button=True,
@@ -126,5 +82,5 @@ def display_map():
 
     return render_template_string('<html><body>{{ m | safe }}</body></html>', m=m._repr_html_())
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     app.run(debug=True)
