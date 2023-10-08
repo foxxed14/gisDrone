@@ -1,8 +1,10 @@
 # gisDrone
 client-server progect to send information of g-module to arduino (440mgz) and deploy information on map in web ui 
-
-g-module is modle which include radio reciver ,water sensor , thermal sensor , shock sensor , photoresistor and light diods,
 ![tempImageAeAAO8](https://github.com/foxxed14/gisDrone/assets/109000907/0ee32aee-6e3c-4526-ba52-03cece016932)
+g-module is modle which include radio reciver ,water sensor , thermal sensor , shock sensor , photoresistor and light diods,
+
+![tempImagepOY6HH](https://github.com/foxxed14/gisDrone/assets/109000907/25140314-1a04-4d11-8c27-73a109121580)
+
 
 web ui interface show track point of drone and telemety on it 
 
